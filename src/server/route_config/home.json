@@ -1,0 +1,24 @@
+{
+  "helloworldPage": {
+    "route": "/",
+    "method": "get",
+    "ignoreauth": true
+  },
+  "tokenPage": {
+    "route": "/token",
+    "method": "get",
+    "ignoreauth": true
+  },
+  "generateToken": {
+    "pathname": "/token",
+    "method": "post",
+    "own": "v1",
+    "ignoreauth": true
+  },
+  "chat": {
+    "pathname": "/",
+    "method": "post",
+    "own": "socket",
+    "ignoreauth": true
+  }
+}
