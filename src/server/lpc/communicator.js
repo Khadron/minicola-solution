@@ -1,3 +1,4 @@
+/* eslint-disable no-invalid-this */
 const path = require('path')
 const EventEmitter = require('events').EventEmitter
 const childProcess = require('child_process')

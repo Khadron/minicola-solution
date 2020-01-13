@@ -1,35 +1,35 @@
-const mime = require('../../utils/mime')
-const config = require('../../config')
-const logger = console.log
-const opts = config.historyMode
+const mime = require("../../utils/mime");
+const config = require("../../config");
+const logger = console.log;
+const opts = config.historyMode;
 
 function isHtml(accept) {
   const htmlAccept = [
-    'text/html',
-    'application/xhtml+xml',
-    'application/xml',
-    '*/*'
-  ]
-  accept = accept.replace(/;/g, ',').split(',')
-  for (var i = 0; i < accept.length; i++) {
-    if (htmlAccept.indexOf(accept[i]) > -1) {
-      return true
+    "text/html",
+    "application/xhtml+xml",
+    "application/xml",
+    "*/*"
+  ];
+  const acceptArr = accept.replace(/;/g, ",").split(",");
+  for (let i = 0; i < acceptArr.length; i++) {
+    if (htmlAccept.indexOf(acceptArr[i]) > -1) {
+      return true;
     }
   }
-  return false
+  return false;
 }
 
 module.exports = () => {
   return async function intercept(ctx, next) {
-    const header = ctx.req.headers
-    const pathname = ctx.path
+    const header = ctx.req.headers;
+    const pathname = ctx.path;
     if (
-      ctx.method !== 'GET' ||
+      ctx.method !== "GET" ||
       !header ||
-      typeof header.accept !== 'string' ||
+      typeof header.accept !== "string" ||
       header.accept.indexOf(mime.json) > -1 ||
       !isHtml(header.accept) ||
-      pathname.lastIndexOf('.') > pathname.lastIndexOf('/')
+      pathname.lastIndexOf(".") > pathname.lastIndexOf("/")
     ) {
       /* not GET
        * json
@@ -37,31 +37,31 @@ module.exports = () => {
        * the client does not accept HTML
        * static files
        * */
-      return next()
+      return next();
     }
-    let rewriteValue = '/index.html'
+    let rewriteValue = "/index.html";
     for (let i = 0, il = opts.ignores.length; i < il; i++) {
-      const ignore = opts.ignores[i]
+      const ignore = opts.ignores[i];
       if (pathname.match(ignore)) {
-        logger('Ignore Path', ctx.method, ctx.url, 'to', rewriteValue)
-        return next()
+        logger("Ignore Path", ctx.method, ctx.url, "to", rewriteValue);
+        return next();
       }
     }
-    for (var i = 0; i < opts.rewrites.length; i++) {
-      var rewrite = opts.rewrites[i]
-      var match = pathname.match(rewrite.from)
+    for (let i = 0; i < opts.rewrites.length; i++) {
+      let rewrite = opts.rewrites[i];
+      let match = pathname.match(rewrite.from);
       if (match !== null) {
-        const to = rewrite.to
-        if (typeof to === 'string') {
-          rewriteValue = to
-        } else if (typeof to === 'function') {
-          rewriteValue = to(ctx.req, match)
+        const to = rewrite.to;
+        if (typeof to === "string") {
+          rewriteValue = to;
+        } else if (typeof to === "function") {
+          rewriteValue = to(ctx.req, match);
         }
-        break
+        break;
       }
     }
-    logger('Rewriting', ctx.method, ctx.url, 'to', rewriteValue)
-    ctx.url = rewriteValue
-    return next()
-  }
-}
+    logger("Rewriting", ctx.method, ctx.url, "to", rewriteValue);
+    ctx.url = rewriteValue;
+    return next();
+  };
+};

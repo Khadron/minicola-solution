@@ -1,15 +1,15 @@
-const Communicator = require('./communicator')
+const Communicator = require("./communicator");
 
 module.exports = handlerPath => {
   return new Promise((resolve, reject) => {
-    const communicator = new Communicator(handlerPath)
-    console.log('LPC initialization:', communicator.name)
+    const communicator = new Communicator(handlerPath);
+    console.log("LPC initialization:", communicator.name);
     communicator
-      .on('ready', function(handler) {
-        resolve(handler)
+      .on("ready", function(handler) {
+        resolve(handler);
       })
-      .on('error', function(err) {
-        reject(err)
-      })
-  })
-}
+      .on("error", function(err) {
+        reject(err);
+      });
+  });
+};

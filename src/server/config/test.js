@@ -1,11 +1,11 @@
 module.exports = {
   redis: {
-    host: '0.0.0.0',
-    password: '......',
+    host: "0.0.0.0",
+    password: "......",
     port: 6006,
     db: 1
   },
   proxy: {
-    host: 'test.sample.com'
+    host: "test.sample.com"
   }
-}
+};
